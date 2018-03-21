@@ -1,0 +1,24 @@
+set(CMAKEDEBSRC_VERSION @PROJECT_VERSION@)
+
+@PACKAGE_INIT@
+
+set_and_check(CMAKEDEBSRC_SHARE_INSTALL_DIR "@PACKAGE_SHARE_INSTALL_DIR@")
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKEDEBSRC_SHARE_INSTALL_DIR}/cmake/CMakeDebSrc)
+
+include(ExternalProject)
+include(BuildDebSrc)
+
+find_program(TAR tar)
+if (NOT TAR)
+  message(WARNING "Unable to find tar program. "
+    "Won't be able to build source packages.")
+endif()
+
+find_program(DEBUILD debuild)
+if (NOT DEBUILD)
+  message(WARNING "Unable to find debuild. "
+    "Won't be able to build source packages.")
+endif()
+
+check_required_components(CMakeDebSrc)

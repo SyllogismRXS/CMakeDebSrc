@@ -1,0 +1,12 @@
+Source: pybind11
+Section: devel
+Priority: optional
+Maintainer: Kevin DeMarco <kevin.demarco@gmail.com>
+Build-Depends: cmake, build-essential, python, python-dev
+Homepage: https://www.kevindemarco.com
+
+Package: pybind11
+Architecture: any
+Depends: python
+Description: pybind11 used by syllogismrxs
+ This is the version of pybind11 used by syllogismrxs
