@@ -13,7 +13,7 @@ BuildDebSrcFromRepo(
   GIT_REPOSITORY https://github.com/pybind/pybind11.git
   GIT_TAG 13d8cd2cc7566de34d724f428ea7a6b6448d6a0c
   SOURCE_VERSION 0.1
-  PPA_VERSION_NUMBER 2
+  PPA_VERSION_NUMBER 3
   PPA ${PPA}
   GPG_KEY_ID ${GPG_KEY_ID}
   UPDATE_COMMAND ""

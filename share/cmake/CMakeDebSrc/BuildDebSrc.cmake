@@ -46,21 +46,21 @@ function(BuildDebSrcFromRepo)
   add_custom_target(
     ${ARG_NAME}-debuild
     DEPENDS ${CMAKE_BINARY_DIR}/src/${DEB_SRC_DIR}/debian
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${TAR} -acf ${ARG_NAME}_${ARG_SOURCE_VERSION}.orig.tar.gz ${DEB_SRC_DIR} --exclude-vcs
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${TAR} -acf ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}.orig.tar.gz ${DEB_SRC_DIR} --exclude-vcs
     COMMAND cd ${CMAKE_BINARY_DIR}/src/${DEB_SRC_DIR} && ${DEBUILD} -i -S -sa -k${ARG_GPG_KEY_ID}
     )
 
   add_custom_target(
     ${ARG_NAME}-local-test
     DEPENDS ${ARG_NAME}-debuild
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && pbuilder-dist xenial build ${ARG_NAME}_${ARG_SOURCE_VERSION}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${PBUILDER_DIST} xenial build ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
     )
 
   # Upload the debian source package to the Launchpad PPA
   add_custom_target(
     ${ARG_NAME}-upload-ppa
     DEPENDS ${ARG_NAME}-debuild
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && dput ${ARG_PPA} ${ARG_NAME}_${ARG_SOURCE_VERSION}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}_source.changes
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${DPUT} ${ARG_PPA} ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}_source.changes
     )
 
   # Make all ppa projects not build by default
@@ -97,21 +97,21 @@ function(BuildDebSrcFromDir)
   add_custom_target(
     ${ARG_NAME}-debuild
     DEPENDS ${CMAKE_BINARY_DIR}/src/${DEB_SRC_DIR}/debian
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${TAR} -acf ${ARG_NAME}_${ARG_SOURCE_VERSION}.orig.tar.gz ${DEB_SRC_DIR} --exclude-vcs
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${TAR} -acf ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}.orig.tar.gz ${DEB_SRC_DIR} --exclude-vcs
     COMMAND cd ${CMAKE_BINARY_DIR}/src/${DEB_SRC_DIR} && ${DEBUILD} -i -S -sa -k${ARG_GPG_KEY_ID}
     )
 
   add_custom_target(
     ${ARG_NAME}-local-test
     DEPENDS ${ARG_NAME}-debuild
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && pbuilder-dist xenial build ${ARG_NAME}_${ARG_SOURCE_VERSION}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${PBUILDER_DIST} xenial build ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
     )
 
   # Upload the debian source package to the Launchpad PPA
   add_custom_target(
     ${ARG_NAME}-upload-ppa
     DEPENDS ${ARG_NAME}-debuild
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && dput ${ARG_PPA} ${ARG_NAME}_${ARG_SOURCE_VERSION}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}_source.changes
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${DPUT} ${ARG_PPA} ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}_source.changes
     )
 
   # Make all ppa projects not build by default

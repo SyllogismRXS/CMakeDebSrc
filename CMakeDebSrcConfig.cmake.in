@@ -21,4 +21,16 @@ if (NOT DEBUILD)
     "Won't be able to build source packages.")
 endif()
 
+find_program(DPUT dput)
+if (NOT DPUT)
+  message(WARNING "Unable to find dput. "
+    "Won't be able to upload to LaunchPad PPA.")
+endif()
+
+find_program(PBUILDER_DIST pbuilder-dist)
+if (NOT DPUT)
+  message(WARNING "Unable to find pbuilder-dist. "
+    "Won't be able to upload to run local tests.")
+endif()
+
 check_required_components(CMakeDebSrc)
