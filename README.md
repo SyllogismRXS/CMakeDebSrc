@@ -53,7 +53,7 @@ where the PPA and GPG\_KEY\_ID are correct for your system.
 
     $ make pybind11-local-test
 
-## Use the debian source package to LaunchPad
+## Upload the debian source package to LaunchPad
 
     $ make pybind11-upload-ppa
 
