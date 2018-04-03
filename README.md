@@ -10,7 +10,7 @@ testing, and uploading debian source packages.
 
     $ mkdir build && cd build
     $ cmake ..
-    
+
 At this point, your other CMake projects can find CMakeDebSrc project using
 "find\_package(CMakeDebSrc)". However, this project does contain a valid "make
 install" target, if required.
@@ -21,16 +21,69 @@ install" target, if required.
 
 On Ubuntu 16.04, install the required packages:
 
-    $ sudo apt-get install pbuilder ubuntu-dev-tools
+    $ sudo apt-get install pbuilder ubuntu-dev-tools debootstrap
 
 ## Setup an Ubuntu Distribution pbuild Environment
 
-    $ pbuilder create
-    $ pbuilder-dist xenial create
+Create your ~/.pbuilderrc file and populate it with the appropriate repository
+mirrors.
+
+    $ touch ~/.pbuilderrc
+    
+Add the following to ~/.pbuilderrc
+
+    if [ "${ARCH}" == "armhf" ]; then
+        MIRRORSITE="http://ports.ubuntu.com/ubuntu-ports"
+        OTHERMIRROR="deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports ${DIST}-updates main universe multiverse | deb [arch=armhf] http://repos.rcn-ee.com/ubuntu/ ${DIST} main"
+    elif [ "${ARCH}" == "amd64" ] || ["${ARCH}" == "i386"]; then
+        MIRRORSITE="http://us.archive.ubuntu.com/ubuntu/"
+    fi
+
+Add keyrings for Ubuntu:
+
+    $ sudo apt install ubuntu-keyring debian-archive-keyring
+
+Add keyring for repos.rcn-ee.net
+
+    $ wget -qO - http://repos.rcn-ee.net/ubuntu/conf/repos.rcn-ee.net.gpg.key | sudo apt-key add -
+
+Create a pbuilder environment for xenial / amd64:
+
+    $ pbuilder create # maybe not needed
+    $ pbuilder-dist xenial create # maybe not needed
+
+    $ sudo DIST=xenial ARCH=amd64 pbuilder \
+        --create               \
+        --distribution xenial  \
+        --architecture amd64   \
+        --basetgz /var/cache/pbuilder/xenial-amd64-base.tgz
+
+This will create a tarball of the distribution in /var/cache/pbuilder. This
+environment can be safely removed from your system with the "rm" command.
+
+Create a pbuilder environment for xenial / armhf
+
+    $ sudo dpkg --add-architecture armhf
+    $ sudo apt-get update
+    $ sudo apt-get install build-essential crossbuild-essential-armhf
+    
+    $ sudo apt-get install qemu-user-static
+    $ sudo DIST=xenial ARCH=armhf pbuilder \
+        --create               \
+        --distribution xenial  \
+        --architecture armhf   \
+        --basetgz /var/cache/pbuilder/xenial-armhf-base.tgz
 
 Allow pbuilder to have access to the network during build-time:
 
     $ echo 'USENETWORK=yes' | sudo tee -a /etc/pbuilderrc
+
+## pbuilder References
+https://blog.packagecloud.io/eng/2015/05/18/building-deb-packages-with-pbuilder/
+https://wiki.ubuntu.com/PbuilderHowto#Using_pbuilder-dist_to_manage_different_architectures_and_distro_releases
+https://wiki.debian.org/PbuilderTricks
+https://jodal.no/2015/03/08/building-arm-debs-with-pbuilder/
+https://larry-price.com/blog/2016/09/27/clean-package-building-with-pbuilder/
 
 # Setup your GPG Key
 

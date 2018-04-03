@@ -33,4 +33,10 @@ if (NOT DPUT)
     "Won't be able to upload to run local tests.")
 endif()
 
+find_program(PBUILDER pbuilder)
+if (NOT DPUT)
+  message(WARNING "Unable to find pbuilder. "
+    "Won't be able to upload to run local tests.")
+endif()
+
 check_required_components(CMakeDebSrc)

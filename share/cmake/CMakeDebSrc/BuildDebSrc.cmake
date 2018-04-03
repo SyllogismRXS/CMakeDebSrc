@@ -2,7 +2,7 @@ include(CMakeParseArguments)
 
 function(BuildDebSrcFromRepo)
   set(options "")
-  set(oneValueArgs NAME DEBIAN_DIR GIT_REPOSITORY GIT_TAG SOURCE_VERSION PPA PPA_VERSION_NUMBER PPA_VERSION_NUMBER_SUFFIX GPG_KEY_ID)
+  set(oneValueArgs NAME DEBIAN_DIR GIT_REPOSITORY GIT_TAG SOURCE_VERSION PPA PPA_VERSION_NUMBER PPA_VERSION_NUMBER_SUFFIX GPG_KEY_ID DISTRIBUTION ARCHITECTURE)
   set(multiValueArgs CONFIGURE_COMMAND PATCH_COMMAND UPDATE_COMMAND)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
@@ -53,7 +53,7 @@ function(BuildDebSrcFromRepo)
   add_custom_target(
     ${ARG_NAME}-local-test
     DEPENDS ${ARG_NAME}-debuild
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${PBUILDER_DIST} xenial build ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && sudo DIST=${ARG_DISTRIBUTION} ARCH=${ARG_ARCHITECTURE} ${PBUILDER} --build --distribution ${ARG_DISTRIBUTION} --architecture ${ARG_ARCHITECTURE} --basetgz /var/cache/pbuilder/${ARG_DISTRIBUTION}-${ARG_ARCHITECTURE}-base.tgz --buildresult ${CMAKE_BINARY_DIR}/${ARG_DISTRIBUTION}/${ARG_ARCHITECTURE} ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
     )
 
   # Upload the debian source package to the Launchpad PPA
@@ -70,7 +70,7 @@ endfunction()
 
 function(BuildDebSrcFromDir)
   set(options "")
-  set(oneValueArgs NAME DIRECTORY SOURCE_VERSION PPA PPA_VERSION_NUMBER PPA_VERSION_NUMBER_SUFFIX GPG_KEY_ID)
+  set(oneValueArgs NAME DIRECTORY SOURCE_VERSION PPA PPA_VERSION_NUMBER PPA_VERSION_NUMBER_SUFFIX GPG_KEY_ID DISTRIBUTION ARCHITECTURE)
   set(multiValueArgs)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
@@ -104,7 +104,7 @@ function(BuildDebSrcFromDir)
   add_custom_target(
     ${ARG_NAME}-local-test
     DEPENDS ${ARG_NAME}-debuild
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${PBUILDER_DIST} xenial build ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${PBUILDER} ${ARG_DISTRIBUTION} ${ARG_ARCHITECTURE} build ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
     )
 
   # Upload the debian source package to the Launchpad PPA
