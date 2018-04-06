@@ -25,19 +25,9 @@ On Ubuntu 16.04, install the required packages:
 
 ## Setup an Ubuntu Distribution pbuild Environment
 
-Create your ~/.pbuilderrc file and populate it with the appropriate repository
-mirrors.
+Setup your .pbuilderrc file with the provided example:
 
-    $ touch ~/.pbuilderrc
-    
-Add the following to ~/.pbuilderrc
-
-    if [ "${ARCH}" == "armhf" ]; then
-        MIRRORSITE="http://ports.ubuntu.com/ubuntu-ports"
-        OTHERMIRROR="deb [arch=armhf] http://ports.ubuntu.com/ubuntu-ports ${DIST}-updates main universe multiverse | deb [arch=armhf] http://repos.rcn-ee.com/ubuntu/ ${DIST} main"
-    elif [ "${ARCH}" == "amd64" ] || ["${ARCH}" == "i386"]; then
-        MIRRORSITE="http://us.archive.ubuntu.com/ubuntu/"
-    fi
+    $ cp pbuilderrc ~/.pbuilderrc
 
 Add keyrings for Ubuntu:
 
