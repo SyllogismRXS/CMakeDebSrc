@@ -39,9 +39,6 @@ Add keyring for repos.rcn-ee.net
 
 Create a pbuilder environment for xenial / amd64:
 
-    $ pbuilder create # maybe not needed
-    $ pbuilder-dist xenial create # maybe not needed
-
     $ sudo DIST=xenial ARCH=amd64 pbuilder \
         --create               \
         --distribution xenial  \
@@ -56,13 +53,26 @@ Create a pbuilder environment for xenial / armhf
     $ sudo dpkg --add-architecture armhf
     $ sudo apt-get update
     $ sudo apt-get install build-essential crossbuild-essential-armhf
-    
+
     $ sudo apt-get install qemu-user-static
     $ sudo DIST=xenial ARCH=armhf pbuilder \
         --create               \
         --distribution xenial  \
         --architecture armhf   \
         --basetgz /var/cache/pbuilder/xenial-armhf-base.tgz
+
+Create a pbuilder environment for xenial / arm64
+
+    $ sudo dpkg --add-architecture arm64
+    $ sudo apt-get update
+    $ sudo apt-get install crossbuild-essential-arm64
+
+    $ sudo apt-get install qemu-user-static
+    $ sudo DIST=xenial ARCH=arm64 pbuilder \
+        --create               \
+        --distribution xenial  \
+        --architecture arm64   \
+        --basetgz /var/cache/pbuilder/xenial-arm64-base.tgz
 
 Allow pbuilder to have access to the network during build-time:
 

@@ -10,7 +10,7 @@ SET(GPG_KEY_ID "3951DA01" CACHE STRING "GPG Key ID on local system.")
 BuildDebSrcFromRepo(
   NAME "pybind11"
   DISTRIBUTION "xenial"
-  ARCHITECTURE "armhf"
+  ARCHITECTURE "arm64"
   DEBIAN_DIR ${CMAKE_SOURCE_DIR}/packages/pybind11/debian
   GIT_REPOSITORY https://github.com/pybind/pybind11.git
   GIT_TAG 13d8cd2cc7566de34d724f428ea7a6b6448d6a0c
