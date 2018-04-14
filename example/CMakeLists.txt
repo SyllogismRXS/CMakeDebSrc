@@ -9,9 +9,6 @@ SET(GPG_KEY_ID "3951DA01" CACHE STRING "GPG Key ID on local system.")
 SET(DISTRIBUTION "xenial" CACHE STRING "Target Linux distribution.")
 SET(ARCHITECTURES "amd64 i386 armhf arm64" CACHE STRING "Possible build architectures.")
 
-# Convert string to cmake list
-string(REPLACE " " ";" ARCHITECTURES ${ARCHITECTURES})
-
 BuildDebSrcFromRepo(
   NAME "pybind11"
   DISTRIBUTION ${DISTRIBUTION}

@@ -39,11 +39,7 @@ Add keyring for repos.rcn-ee.net
 
 Create a pbuilder environment for xenial / amd64:
 
-    $ sudo DIST=xenial ARCH=amd64 pbuilder \
-        --create               \
-        --distribution xenial  \
-        --architecture amd64   \
-        --basetgz /var/cache/pbuilder/xenial-amd64-base.tgz
+    $ sudo DIST=xenial ARCH=amd64 pbuilder --create
 
 This will create a tarball of the distribution in /var/cache/pbuilder. This
 environment can be safely removed from your system with the "rm" command.
@@ -55,11 +51,7 @@ Create a pbuilder environment for xenial / armhf
     $ sudo apt-get install build-essential crossbuild-essential-armhf
 
     $ sudo apt-get install qemu-user-static
-    $ sudo DIST=xenial ARCH=armhf pbuilder \
-        --create               \
-        --distribution xenial  \
-        --architecture armhf   \
-        --basetgz /var/cache/pbuilder/xenial-armhf-base.tgz
+    $ sudo DIST=xenial ARCH=armhf pbuilder --create
 
 Create a pbuilder environment for xenial / arm64
 
@@ -68,22 +60,11 @@ Create a pbuilder environment for xenial / arm64
     $ sudo apt-get install crossbuild-essential-arm64
 
     $ sudo apt-get install qemu-user-static
-    $ sudo DIST=xenial ARCH=arm64 pbuilder \
-        --create               \
-        --distribution xenial  \
-        --architecture arm64   \
-        --basetgz /var/cache/pbuilder/xenial-arm64-base.tgz
+    $ sudo DIST=xenial ARCH=arm64 pbuilder --create
 
 Allow pbuilder to have access to the network during build-time:
 
     $ echo 'USENETWORK=yes' | sudo tee -a /etc/pbuilderrc
-
-## pbuilder References
-https://blog.packagecloud.io/eng/2015/05/18/building-deb-packages-with-pbuilder/
-https://wiki.ubuntu.com/PbuilderHowto#Using_pbuilder-dist_to_manage_different_architectures_and_distro_releases
-https://wiki.debian.org/PbuilderTricks
-https://jodal.no/2015/03/08/building-arm-debs-with-pbuilder/
-https://larry-price.com/blog/2016/09/27/clean-package-building-with-pbuilder/
 
 # Setup your GPG Key
 
@@ -102,9 +83,9 @@ where the PPA and GPG\_KEY\_ID are correct for your system.
 
     $ make pybind11-debuild
 
-## Use pbuilder to perform a local test build of your source package
+## Use pbuilder to perform a local test (armhf) build of your source package
 
-    $ make pybind11-local-test
+    $ make pybind11-armhf-local-test
 
 ## Upload the debian source package to LaunchPad
 
@@ -131,3 +112,27 @@ will have to manually modify the files under the "debian" directory since these
 files may vary greatly between projects. You can use git to track the debian
 configuration files and use the CMake functions provided in this project to
 locally test debian source package builds and upload them to LaunchPad.
+
+# Notes
+
+## Updating package lists
+
+I have found that the "pbuilder --update" command doesn't work as expected when
+adding additional mirrors (OTHERMIRROR) to the pbuilderrc file. To work around
+this, I will remove the pbuilder cache and rerun the "pbuilder --create"
+command.
+
+Clear the pbuilder cache and tarballs
+
+    $ sudo rm -rf /var/cache/pbuilder/*
+
+Create the tarball again:
+
+    $ sudo DIST=xenial ARCH=arm64 pbuilder --create
+
+# pbuilder References
+https://blog.packagecloud.io/eng/2015/05/18/building-deb-packages-with-pbuilder/
+https://wiki.ubuntu.com/PbuilderHowto#Using_pbuilder-dist_to_manage_different_architectures_and_distro_releases
+https://wiki.debian.org/PbuilderTricks
+https://jodal.no/2015/03/08/building-arm-debs-with-pbuilder/
+https://larry-price.com/blog/2016/09/27/clean-package-building-with-pbuilder/

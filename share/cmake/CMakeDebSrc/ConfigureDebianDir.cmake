@@ -10,6 +10,10 @@ function(ConfigureDebianDir)
 
   # Clean up the input file
   file(REMOVE ${DEST_DIR}/debian/changelog.in)
+
+  # Remove .git directory
+  file(REMOVE_RECURSE ${DEST_DIR}/.git)
+
 endfunction()
 
 ConfigureDebianDir()

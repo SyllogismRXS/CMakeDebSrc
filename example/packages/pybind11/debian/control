@@ -2,6 +2,7 @@ Source: pybind11
 Section: devel
 Priority: optional
 Maintainer: Kevin DeMarco <kevin.demarco@gmail.com>
+Pre-Depends: ${misc:Pre-Depends}
 Build-Depends: cmake, build-essential, python, python-dev
 Homepage: https://www.kevindemarco.com
 
