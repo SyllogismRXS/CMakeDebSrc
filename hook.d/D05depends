@@ -1,0 +1,4 @@
+#!/bin/bash
+dependency_dir=~/repos/CMakeDebSrc/example/build/xenial/amd64
+(cd $dependency_dir; apt-ftparchive packages . > Packages)
+apt-get update
