@@ -25,6 +25,10 @@ BuildDebSrcFromRepo(
   CONFIGURE_COMMAND ""
   )
 
+# Use BuildDebSrcFromDir to build a debian package from a local directory on
+# the machine. Note: You must provide a path to the PROJECT_DIRECTORY and the
+# DEBIAN_DIR that contains the debian configuration files.
+
 #BuildDebSrcFromDir(
 #  NAME "pybind11"
 #  PROJECT_DIRECTORY /path/to/pybind11
@@ -39,18 +43,3 @@ BuildDebSrcFromRepo(
 #  PATCH_COMMAND ""
 #  CONFIGURE_COMMAND ""
 #  )
-
-BuildDebSrcFromDir(
-  NAME "scrimmage"
-  PROJECT_DIRECTORY /home/syllogismrxs/scrimmage/scrimmage
-  DISTRIBUTION ${DISTRIBUTION}
-  ARCHITECTURES ${ARCHITECTURES_LIST}
-  DEBIAN_DIR ${CMAKE_SOURCE_DIR}/packages/scrimmage/debian
-  SOURCE_VERSION 0.1
-  PPA_VERSION_NUMBER 0
-  PPA ${PPA}
-  GPG_KEY_ID ${GPG_KEY_ID}
-  UPDATE_COMMAND ""
-  PATCH_COMMAND ""
-  CONFIGURE_COMMAND ""
-  )
