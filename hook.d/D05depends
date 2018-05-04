@@ -1,4 +1,4 @@
 #!/bin/bash
-dependency_dir=~/repos/CMakeDebSrc/example/build/xenial/amd64
+dependency_dir=~/repos/gtri-deb-src/build/xenial/
 (cd $dependency_dir; apt-ftparchive packages . > Packages)
 apt-get update

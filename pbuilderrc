@@ -56,8 +56,7 @@ fi
 if [ "${ARCH}" == "armhf" ] || [ "${ARCH}" == "arm64" ]; then
    MIRRORSITE="http://ports.ubuntu.com/ubuntu-ports/"
    COMPONENTS="main restricted universe multiverse"
-   OTHERMIRROR="deb http://ports.ubuntu.com/ubuntu-ports/ ${DIST} main restricted universe multiverse
-   |deb http://ports.ubuntu.com/ubuntu-ports/ ${DIST}-updates main universe multiverse
+   OTHERMIRROR="deb http://ports.ubuntu.com/ubuntu-ports/ ${DIST}-updates main universe multiverse
    |deb [trusted=yes] http://repos.rcn-ee.com/ubuntu/ ${DIST} main
    |deb [trusted=yes] http://ppa.launchpad.net/kevin-demarco/scrimmage/ubuntu ${DIST} main"
 
