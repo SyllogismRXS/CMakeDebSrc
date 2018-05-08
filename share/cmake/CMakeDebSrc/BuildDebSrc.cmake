@@ -98,7 +98,7 @@ endfunction()
 function(BuildDebSrcFromDir)
   set(options "")
   set(oneValueArgs NAME PROJECT_DIRECTORY DEBIAN_DIR SOURCE_VERSION PPA PPA_VERSION_NUMBER PPA_VERSION_NUMBER_SUFFIX GPG_KEY_ID DISTRIBUTION ARCHITECTURES)
-  set(multiValueArgs)
+  set(multiValueArgs CONFIGURE_COMMAND PATCH_COMMAND UPDATE_COMMAND)
   cmake_parse_arguments(ARG "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
   set(DEB_SRC_DIR ${ARG_NAME}-deb-src)
@@ -111,8 +111,32 @@ function(BuildDebSrcFromDir)
     -DSRC_DIR=${ARG_PROJECT_DIRECTORY}
     -DDEST_DIR=${CMAKE_BINARY_DIR}/src/${DEB_SRC_DIR}
     -P ${CMAKEDEBSRC_SHARE_INSTALL_DIR}/cmake/CMakeDebSrc/ConfigureProjectDir.cmake
-    OUTPUT ${DEB_SRC_DIR}
+    OUTPUT deb-dir-init
     COMMENT "Configure Project Directory"
+    )
+
+  add_custom_command(
+    DEPENDS deb-dir-init
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/src/${DEB_SRC_DIR}
+    COMMAND ${ARG_UPDATE_COMMAND}
+    OUTPUT deb-dir-update
+    COMMENT "Running update"
+    )
+
+  add_custom_command(
+    DEPENDS deb-dir-update
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/src/${DEB_SRC_DIR}
+    COMMAND ${ARG_PATCH_COMMAND}
+    OUTPUT deb-dir-patch
+    COMMENT "Running patch"
+    )
+
+  add_custom_command(
+    DEPENDS deb-dir-patch
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/src/${DEB_SRC_DIR}
+    COMMAND ${ARG_CONFIGURE_COMMAND}
+    OUTPUT ${DEB_SRC_DIR}
+    COMMENT "Running configure"
     )
 
   BuildDeb(
