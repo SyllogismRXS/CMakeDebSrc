@@ -6,14 +6,14 @@ find_package(CMakeDebSrc)
 
 SET(PPA "ppa:kevin-demarco/cmake-project-template" CACHE STRING "Launchpad PPA for dput.")
 SET(GPG_KEY_ID "3951DA01" CACHE STRING "GPG Key ID on local system.")
-SET(DISTRIBUTION "xenial" CACHE STRING "Target Linux distribution.")
+SET(DISTRIBUTIONS "xenial jessie" CACHE STRING "Target Linux distributions.")
 SET(ARCHITECTURES "amd64 i386 armhf arm64" CACHE STRING "Possible build architectures.")
 
 BuildDebSrcFromRepo(
   NAME "pybind11"
-  DISTRIBUTION ${DISTRIBUTION}
-  ARCHITECTURES ${ARCHITECTURES_LIST}
-  DEBIAN_DIR ${CMAKE_SOURCE_DIR}/packages/pybind11/debian
+  DISTRIBUTIONS ${DISTRIBUTIONS}
+  ARCHITECTURES ${ARCHITECTURES}
+  PACKAGES_DIR ${CMAKE_SOURCE_DIR}/packages
   GIT_REPOSITORY https://github.com/pybind/pybind11.git
   GIT_TAG 13d8cd2cc7566de34d724f428ea7a6b6448d6a0c
   SOURCE_VERSION 0.1
@@ -29,17 +29,17 @@ BuildDebSrcFromRepo(
 # the machine. Note: You must provide a path to the PROJECT_DIRECTORY and the
 # DEBIAN_DIR that contains the debian configuration files.
 
-#BuildDebSrcFromDir(
-#  NAME "pybind11"
-#  PROJECT_DIRECTORY /path/to/pybind11
-#  DISTRIBUTION ${DISTRIBUTION}
-#  ARCHITECTURES ${ARCHITECTURES_LIST}
-#  DEBIAN_DIR ${CMAKE_SOURCE_DIR}/packages/pybind11/debian
-#  SOURCE_VERSION 0.1
-#  PPA_VERSION_NUMBER 3
-#  PPA ${PPA}
-#  GPG_KEY_ID ${GPG_KEY_ID}
-#  UPDATE_COMMAND ""
-#  PATCH_COMMAND ""
-#  CONFIGURE_COMMAND ""
-#  )
+# BuildDebSrcFromDir(
+#   NAME "pybind11"
+#   DISTRIBUTIONS ${DISTRIBUTIONS}
+#   ARCHITECTURES ${ARCHITECTURES}
+#   PROJECT_DIRECTORY /path/to/pybind11-src
+#   PACKAGES_DIR ${CMAKE_SOURCE_DIR}/packages
+#   SOURCE_VERSION 0.7.0
+#   PPA_VERSION_NUMBER 1
+#   PPA ${PPA}
+#   GPG_KEY_ID ${GPG_KEY_ID}
+#   UPDATE_COMMAND ""
+#   PATCH_COMMAND ""
+#   CONFIGURE_COMMAND ""
+#   )
