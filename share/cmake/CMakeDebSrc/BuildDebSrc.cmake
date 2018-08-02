@@ -115,7 +115,7 @@ function(BuildDebSrcFromDir)
   string(REPLACE " " ";" ARG_DISTRIBUTIONS ${ARG_DISTRIBUTIONS})
 
   foreach (DISTRIBUTION ${ARG_DISTRIBUTIONS})
-    set(DEB_SRC_DIR ${ARG_NAME}-${DISTRIBUTION}-deb-src})
+    set(DEB_SRC_DIR ${ARG_NAME}-${DISTRIBUTION}-deb-src)
 
     # Run a custom cmake script that copies the debian directory into the
     # respective source tree and configure the changelog file.
