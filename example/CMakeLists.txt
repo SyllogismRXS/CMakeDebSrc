@@ -33,12 +33,12 @@ BuildDebSrcFromRepo(
   GIT_REPOSITORY https://github.com/opencv/opencv.git
   GIT_TAG 4.1.0
   SOURCE_VERSION 0.1
-  PPA_VERSION_NUMBER 0
+  PPA_VERSION_NUMBER 1
   PPA ${PPA}
   GPG_KEY_ID ${GPG_KEY_ID}
   UPDATE_COMMAND git clone https://github.com/opencv/opencv_contrib.git --branch 4.1.0
   PATCH_COMMAND ""
-  CONFIGURE_COMMAND ""
+  CONFIGURE_COMMAND ${PROJECT_SOURCE_DIR}/scripts/opencv4-xfeatures2d-download.sh
   )
 
 # Use BuildDebSrcFromDir to build a debian package from a local directory on
