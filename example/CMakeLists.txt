@@ -32,8 +32,8 @@ BuildDebSrcFromRepo(
   PACKAGES_DIR ${CMAKE_SOURCE_DIR}/packages
   GIT_REPOSITORY https://github.com/opencv/opencv.git
   GIT_TAG 4.1.0
-  SOURCE_VERSION 0.1
-  PPA_VERSION_NUMBER 2
+  SOURCE_VERSION 4.1.0
+  PPA_VERSION_NUMBER 0
   PPA ${PPA}
   GPG_KEY_ID ${GPG_KEY_ID}
   UPDATE_COMMAND git clone https://github.com/opencv/opencv_contrib.git --branch 4.1.0
