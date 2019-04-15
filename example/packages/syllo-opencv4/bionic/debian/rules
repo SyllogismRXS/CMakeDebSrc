@@ -38,7 +38,7 @@ CMAKE_ARCH_FLAGS += -DWITH_1394=OFF -DWITH_V4L=OFF
 endif
 
 CMAKE_FLAGS = \
-	-DCMAKE_INSTALL_PREFIX=../debian/tmp/opt/syllo/${DEB_HOST_MULTIARCH} \
+	-DCMAKE_INSTALL_PREFIX=/opt/syllo/${DEB_HOST_MULTIARCH} \
 	-DBUILD_SHARED_LIBS=ON \
 	-DBUILD_DOCS=OFF \
 	-DCMAKE_INSTALL_LIBDIR="lib/$(DEB_HOST_MULTIARCH)" \
@@ -80,31 +80,26 @@ CMAKE_FLAGS = \
 	-DOPENCV_EXTRA_MODULES_PATH="$(CURDIR)/opencv_contrib/modules" \
 	$(CMAKE_ARCH_FLAGS)
 
-# secondly called by launchpad
-build:
-	cd $(CURDIR);
-	# Quiet is needed for this to run in qemu
-	# git clone --quiet https://github.com/opencv/opencv_contrib.git --branch 3.4.0;
-	cd -;
-	mkdir $(BUILDDIR);
-	cd $(BUILDDIR); cmake $(CMAKE_FLAGS) ..
-	make -j4 -C $(BUILDDIR)
+export DH_VERBOSE=1
 
-# thirdly called by launchpad
-binary: binary-indep binary-arch
+%:
+	dh $@ --buildsystem=cmake
 
-binary-indep:
-	# nothing to be done
+override_dh_clean:
+	dh_clean -O--buildsystem=cmake
 
-binary-arch:
-	cd $(BUILDDIR); cmake -P cmake_install.cmake
-	mkdir debian/tmp/DEBIAN
-	dpkg-gencontrol -psyllo-opencv4
-	dpkg --build debian/tmp ..
+override_dh_auto_configure:
+	dh_auto_configure -- $(CMAKE_FLAGS)
 
-# firstly called by launchpad
-clean:
-	rm -f build
-	rm -rf $(BUILDDIR)
+override_dh_auto_test:
+	# Don't run any tests
 
-.PHONY: binary binary-arch binary-indep clean
+override_dh_shlibdeps:
+	dh_makeshlibs -O--buildsystem=cmake
+	dh_shlibdeps -l/opt/syllo/${DEB_HOST_MULTIARCH}/lib/${DEB_HOST_MULTIARCH} -O--buildsystem=cmake
+
+override_dh_install:
+	dh_install -O--buildsystem=cmake --list-missing
+
+override_dh_fixperms-indep:
+	dh_fixperms
