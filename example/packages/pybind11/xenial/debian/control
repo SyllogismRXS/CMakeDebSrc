@@ -3,11 +3,11 @@ Section: devel
 Priority: optional
 Maintainer: Kevin DeMarco <kevin.demarco@gmail.com>
 Pre-Depends: ${misc:Pre-Depends}
-Build-Depends: cmake, build-essential, python, python-dev
+Build-Depends: cmake, python, python-dev
 Homepage: https://www.kevindemarco.com
 
 Package: pybind11
 Architecture: any
-Depends: python
+Depends:
 Description: pybind11 used by syllogismrxs
  This is the version of pybind11 used by syllogismrxs

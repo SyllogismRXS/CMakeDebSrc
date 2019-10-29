@@ -35,17 +35,17 @@ function(BuildDeb)
   add_custom_target(
     ${ARG_NAME}-${ARG_DISTRIBUTION}-debuild
     DEPENDS ${CMAKE_BINARY_DIR}/src/${ARG_DEB_SRC_DIR}/debian/changelog
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${TAR} -acf ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}.orig.tar.gz ${ARG_DEB_SRC_DIR} --exclude-vcs
-    COMMAND cd ${CMAKE_BINARY_DIR}/src/${ARG_DEB_SRC_DIR} && ${DEBUILD} -i -S -sa -k${ARG_GPG_KEY_ID}
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${TAR} -acf ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}.${ARG_DISTRIBUTION}.orig.tar.gz ${ARG_DEB_SRC_DIR} --exclude-vcs
+    COMMAND cd ${CMAKE_BINARY_DIR}/src/${ARG_DEB_SRC_DIR} && ${DEBUILD} --no-tgz-check -i -S -sa -k${ARG_GPG_KEY_ID}
     COMMENT "Running debuild"
-    OUTPUT ${CMAKE_BINARY_DIR}/src/${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}.orig.tar.gz
+    OUTPUT ${CMAKE_BINARY_DIR}/src/${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}.${ARG_DISTRIBUTION}.orig.tar.gz
     )
 
   # Upload the debian source package to the Launchpad PPA
   add_custom_target(
     ${ARG_NAME}-${ARG_DISTRIBUTION}-upload-ppa
     DEPENDS ${ARG_NAME}-${ARG_DISTRIBUTION}-debuild
-    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${DPUT} ${ARG_PPA} ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}_source.changes
+    COMMAND cd ${CMAKE_BINARY_DIR}/src && ${DPUT} ${ARG_PPA} ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}-${ARG_DISTRIBUTION}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}_source.changes
     )
   # Make all ppa projects not build by default
   set_target_properties(${ARG_NAME}-${ARG_DISTRIBUTION}-upload-ppa PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
@@ -55,7 +55,7 @@ function(BuildDeb)
     add_custom_target(
       ${ARG_NAME}-${ARG_DISTRIBUTION}-${ARCHITECTURE}-local-test
       DEPENDS ${ARG_NAME}-${ARG_DISTRIBUTION}-debuild
-      COMMAND cd ${CMAKE_BINARY_DIR}/src && sudo DIST=${ARG_DISTRIBUTION} ARCH=${ARCHITECTURE} ${PBUILDER} --build --buildresult ${CMAKE_BINARY_DIR}/${ARG_DISTRIBUTION}/${ARCHITECTURE} ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
+      COMMAND cd ${CMAKE_BINARY_DIR}/src && sudo DIST=${ARG_DISTRIBUTION} ARCH=${ARCHITECTURE} ${PBUILDER} --build --buildresult ${CMAKE_BINARY_DIR}/${ARG_DISTRIBUTION}/${ARCHITECTURE} ${ARG_NAME}_${ARG_SOURCE_VERSION}.${ARG_PPA_VERSION_NUMBER}-${ARG_PPA_VERSION_NUMBER}-${ARG_DISTRIBUTION}ppa${ARG_PPA_VERSION_NUMBER_SUFFIX}.dsc
       )
   endforeach() # architectures
 endfunction()
